@@ -189,18 +189,24 @@ function openQuestionModal(idx) {
 
   document.getElementById('modal-tile-num').textContent = `Tile ${tile.num} · ${team.name}`;
 
+  // Hint is the question shown to players
   document.getElementById('modal-question').innerHTML =
-    `<span class="q-term">${entry.acronym}</span>` +
-    (entry.hint ? `<span class="q-hint">💡 ${entry.hint}</span>` : '');
+    `<span class="q-hint-label">💡 Clue</span>` +
+    `<span class="q-term">${entry.hint}</span>`;
 
+  // Answer is the acronym/term
   document.getElementById('modal-answer').innerHTML =
     `<div class="ans-full">${
       entry.isAcronym
         ? `<strong>${entry.acronym}</strong> = ${entry.full}`
-        : `<strong>${entry.full}</strong>`
-    }</div>` +
-    `<div class="ans-detail">${entry.answer}</div>`;
+        : `<strong>${entry.acronym}</strong> — ${entry.full}`
+    }</div>`;
 
+  // Explanation shown only after correct/wrong — store on element for later
+  document.getElementById('modal-answer').dataset.explanation = entry.answer;
+
+  document.getElementById('modal-explanation').innerHTML = '';
+  document.getElementById('modal-explanation').classList.add('hidden');
   document.getElementById('modal-answer').classList.add('hidden');
   document.getElementById('reveal-btn').classList.remove('hidden');
   document.getElementById('correct-btn').classList.add('hidden');
@@ -215,21 +221,35 @@ document.getElementById('reveal-btn').addEventListener('click', () => {
   document.getElementById('wrong-btn').classList.remove('hidden');
 });
 
+function showExplanationThen(callback) {
+  const explanation = document.getElementById('modal-answer').dataset.explanation;
+  const el = document.getElementById('modal-explanation');
+  el.innerHTML = `<div class="expl-label">📖 Explanation</div><div class="expl-text">${explanation}</div>`;
+  el.classList.remove('hidden');
+  // Hide correct/wrong, show a continue button
+  document.getElementById('correct-btn').classList.add('hidden');
+  document.getElementById('wrong-btn').classList.add('hidden');
+  document.getElementById('continue-btn').classList.remove('hidden');
+  document.getElementById('continue-btn').onclick = () => {
+    document.getElementById('continue-btn').classList.add('hidden');
+    document.getElementById('q-modal').classList.add('hidden');
+    callback();
+  };
+}
+
 document.getElementById('correct-btn').addEventListener('click', () => {
   const team = state.teams[state.currentTeam];
   team.score++;
   team.streak++;
-  if (team.streak > 0 && team.streak % 3 === 0) team.score++; // streak bonus
+  if (team.streak > 0 && team.streak % 3 === 0) team.score++;
   state.tiles[state.currentTileIdx].used = true;
-  document.getElementById('q-modal').classList.add('hidden');
-  advanceTurn();
+  showExplanationThen(advanceTurn);
 });
 
 document.getElementById('wrong-btn').addEventListener('click', () => {
   state.teams[state.currentTeam].streak = 0;
   state.tiles[state.currentTileIdx].used = true;
-  document.getElementById('q-modal').classList.add('hidden');
-  advanceTurn();
+  showExplanationThen(advanceTurn);
 });
 
 // ── Special Tiles ───────────────────────────────────────

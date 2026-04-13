@@ -407,33 +407,54 @@ body {
   border-radius: 12px;
   padding: 14px 18px;
   animation: popIn .2s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+}
+.q-hint-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.q-term {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.45;
+  color: var(--text);
 }
 .ans-full {
   color: var(--green);
   font-weight: 700;
   font-size: 1.05rem;
 }
-.ans-detail {
+#modal-explanation {
+  background: rgba(168,85,247,0.1);
+  border: 1.5px solid var(--purple);
+  border-radius: 12px;
+  padding: 14px 18px;
+  animation: popIn .2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.expl-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--purple);
+  font-weight: 700;
+}
+.expl-text {
   color: var(--muted);
   font-size: 0.88rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
-.q-term {
-  display: block;
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.9rem;
-  color: var(--accent);
-  line-height: 1.2;
-}
-.q-hint {
-  display: block;
-  color: var(--muted);
-  font-size: 0.92rem;
-  margin-top: 6px;
-  font-style: italic;
+.continue-btn {
+  background: var(--purple) !important;
+  color: white !important;
+  width: 100%;
 }
 
 .modal-actions {
