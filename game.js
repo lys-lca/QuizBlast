@@ -189,21 +189,19 @@ function openQuestionModal(idx) {
 
   document.getElementById('modal-tile-num').textContent = `Tile ${tile.num} · ${team.name}`;
 
-  // Hint is the question shown to players
+  // Stage 1: just the acronym/term as the question
   document.getElementById('modal-question').innerHTML =
-    `<span class="q-hint-label">💡 Clue</span>` +
-    `<span class="q-term">${entry.hint}</span>`;
+    `<span class="q-term">${entry.acronym}</span>`;
 
-  // Answer is the acronym/term
+  // Stage 2 (reveal): hint is the answer
   document.getElementById('modal-answer').innerHTML =
-    `<div class="ans-full">${
-      entry.isAcronym
-        ? `<strong>${entry.acronym}</strong> = ${entry.full}`
-        : `<strong>${entry.acronym}</strong> — ${entry.full}`
-    }</div>`;
+    `<div class="ans-full">${entry.hint}</div>`;
 
-  // Explanation shown only after correct/wrong — store on element for later
-  document.getElementById('modal-answer').dataset.explanation = entry.answer;
+  // Stage 3 (after correct/wrong): full explanation
+  document.getElementById('modal-answer').dataset.explanation =
+    entry.isAcronym
+      ? `<strong>${entry.acronym}</strong> = ${entry.full}<br><br>${entry.answer}`
+      : `<strong>${entry.full}</strong><br><br>${entry.answer}`;
 
   document.getElementById('modal-explanation').innerHTML = '';
   document.getElementById('modal-explanation').classList.add('hidden');
@@ -211,6 +209,7 @@ function openQuestionModal(idx) {
   document.getElementById('reveal-btn').classList.remove('hidden');
   document.getElementById('correct-btn').classList.add('hidden');
   document.getElementById('wrong-btn').classList.add('hidden');
+  document.getElementById('continue-btn').classList.add('hidden');
   document.getElementById('q-modal').classList.remove('hidden');
 }
 
